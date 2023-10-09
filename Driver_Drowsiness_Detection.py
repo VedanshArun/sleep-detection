@@ -6,6 +6,35 @@ import cv2
 import winsound 
 import numpy as np
 import time
+import os
+
+
+wifiName = 'BSS Sleep-Detection'
+wifiPassword = 'testing123'
+
+def CreateWifiConfig(SSID, password):
+	config_lines = [
+		'ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev',
+		'update_config=1',
+		'country=US',
+		'\n',
+		'network={',
+		'\tssid="{}"'.format(SSID),
+		'\tpsk="{}"'.format(password),
+		'}'
+	]
+
+	config = '\n'.join(config_lines)
+
+	print(config)
+
+	os.popen("sudo chmod a+w /etc/wpa_supplicant/wpa_supplicant.conf")
+
+	with open("/etc/wpa_supplicant/wpa_supplicant.conf", "w") as wifi:
+		wifi.write(config)
+	
+	print("Wifi config added")
+
 
 initial_ignored_frames = 0
 prev = 0 
@@ -13,6 +42,9 @@ pause = False
 pause2 = True
 temp = False
 open_eye_frames = 0 
+
+CreateWifiConfig(wifiName,wifiPassword)
+os.popen("sudo reboot")
 
 def eye_aspect_ratio(eye):
 	A = distance.euclidean(eye[1], eye[5])
