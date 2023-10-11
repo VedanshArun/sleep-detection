@@ -28,4 +28,4 @@ def CreateWifiConfig(SSID, password):
 
 
 CreateWifiConfig(wifiName,wifiPassword)
-os.popen("sudo reboot")
+os.popen("sudo wpa_cli -i wlan0 reconfigure")
